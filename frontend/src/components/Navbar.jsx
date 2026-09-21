@@ -50,6 +50,42 @@ const Navbar = () => {
                     Dashboard
                   </Link>
                 </li>
+
+                {user?.role === 'BUYER' && (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link text-white" to="/buyer/rfqs">
+                        My RFQs
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link text-white" to="/buyer/quotations">
+                        Quotations
+                      </Link>
+                    </li>
+                    <li className="nav-item me-lg-2">
+                      <Link className="btn btn-light text-primary btn-sm rounded-pill px-3 fw-bold shadow-sm" to="/buyer/rfqs/new">
+                        + Post RFQ
+                      </Link>
+                    </li>
+                  </>
+                )}
+
+                {user?.role === 'SUPPLIER' && (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link text-white" to="/supplier/dashboard">
+                        Open RFQs
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link text-white" to="/supplier/dashboard">
+                        My Quotes
+                      </Link>
+                    </li>
+                  </>
+                )}
+
                 <li className="nav-item d-flex align-items-center ms-lg-2">
                   <span className="badge bg-light text-primary px-3 py-2 rounded-pill shadow-sm">
                     <i className="bi bi-person-circle me-1"></i>
