@@ -17,6 +17,9 @@ import BuyerQuotations from './pages/BuyerQuotations';
 
 // Supplier Pages
 import SupplierDashboard from './pages/SupplierDashboard';
+import BrowseRFQs from './pages/BrowseRFQs';
+import SupplierRFQDetails from './pages/SupplierRFQDetails';
+import MyQuotations from './pages/MyQuotations';
 
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -89,6 +92,30 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={['SUPPLIER']}>
                     <SupplierDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/supplier/rfqs"
+                element={
+                  <ProtectedRoute allowedRoles={['SUPPLIER']}>
+                    <BrowseRFQs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/supplier/rfqs/:id"
+                element={
+                  <ProtectedRoute allowedRoles={['SUPPLIER']}>
+                    <SupplierRFQDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/supplier/quotations"
+                element={
+                  <ProtectedRoute allowedRoles={['SUPPLIER']}>
+                    <MyQuotations />
                   </ProtectedRoute>
                 }
               />

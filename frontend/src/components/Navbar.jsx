@@ -74,13 +74,13 @@ const Navbar = () => {
                 {user?.role === 'SUPPLIER' && (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/supplier/dashboard">
-                        Open RFQs
+                      <Link className="nav-link text-white" to="/supplier/rfqs">
+                        Browse RFQs
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/supplier/dashboard">
-                        My Quotes
+                      <Link className="nav-link text-white" to="/supplier/quotations">
+                        My Quotations
                       </Link>
                     </li>
                   </>
