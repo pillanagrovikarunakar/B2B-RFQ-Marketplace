@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "b2b-rfq-phase3-postman-collection",
+		"name": "Phase 3 - RFQ API Postman Collection",
+		"description": "Postman Collection for testing Phase 3 RFQ Backend Functionality including Auth, RFQ CRUD, permissions, and field validations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "buyer_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "supplier_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "created_rfq_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register Buyer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Buyer Demo\",\n  \"email\": \"buyer_demo@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"BUYER\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register/",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register", ""]
+						}
+					}
+				},
+				{
+					"name": "Register Supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Supplier Demo\",\n  \"email\": \"supplier_demo@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"SUPPLIER\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register/",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register", ""]
+						}
+					}
+				},
+				{
+					"name": "Login Buyer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"buyer_demo@example.com\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login/",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login", ""]
+						}
+					}
+				},
+				{
+					"name": "Login Supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"supplier_demo@example.com\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login/",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login", ""]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. RFQ Endpoints - Successful Cases",
+			"item": [
+				{
+					"name": "POST Create RFQ (As Buyer)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Custom Hydraulic Valve 5000\",\n  \"description\": \"High-pressure stainless steel valve for industrial hydraulic systems.\",\n  \"quantity\": 150,\n  \"delivery_location\": \"Facility B, Warehouse 4, Chicago IL\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "GET List RFQs (As Buyer)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "GET List Open RFQs (As Supplier)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{supplier_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "GET RFQ Detail (As Buyer)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs/{{created_rfq_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", "{{created_rfq_id}}", ""]
+						}
+					}
+				},
+				{
+					"name": "PUT Update RFQ (As Buyer Owner)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Custom Hydraulic Valve 5000 - Updated\",\n  \"description\": \"Updated description with additional specifications.\",\n  \"quantity\": 200,\n  \"delivery_location\": \"Facility B, Warehouse 4, Chicago IL\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/{{created_rfq_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", "{{created_rfq_id}}", ""]
+						}
+					}
+				},
+				{
+					"name": "PATCH Close RFQ (As Buyer Owner)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"CLOSED\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/{{created_rfq_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", "{{created_rfq_id}}", ""]
+						}
+					}
+				},
+				{
+					"name": "DELETE RFQ (As Buyer Owner)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs/{{created_rfq_id}}/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", "{{created_rfq_id}}", ""]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Unauthorized & Invalid Cases",
+			"item": [
+				{
+					"name": "POST Create RFQ As Supplier (403 Forbidden)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{supplier_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Unauthorized Supplier RFQ\",\n  \"description\": \"Suppliers cannot create RFQs\",\n  \"quantity\": 10,\n  \"delivery_location\": \"Anywhere\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "POST Create RFQ Without Token (401 Unauthorized)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Unauthenticated RFQ\",\n  \"description\": \"No auth header provided\",\n  \"quantity\": 10,\n  \"delivery_location\": \"Anywhere\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "POST Create RFQ Invalid Quantity <= 0 (400 Bad Request)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Invalid Quantity RFQ\",\n  \"description\": \"Testing quantity zero\",\n  \"quantity\": 0,\n  \"delivery_location\": \"Location\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "POST Create RFQ Past Deadline (400 Bad Request)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Past Deadline RFQ\",\n  \"description\": \"Testing past deadline\",\n  \"quantity\": 10,\n  \"delivery_location\": \"Location\",\n  \"deadline\": \"2020-01-01T00:00:00Z\",\n  \"status\": \"OPEN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				},
+				{
+					"name": "POST Create RFQ Invalid Status (400 Bad Request)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{buyer_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_name\": \"Invalid Status RFQ\",\n  \"description\": \"Testing invalid status value\",\n  \"quantity\": 10,\n  \"delivery_location\": \"Location\",\n  \"deadline\": \"2026-12-31T23:59:59Z\",\n  \"status\": \"INVALID_STATUS\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/",
+							"host": ["{{base_url}}"],
+							"path": ["rfqs", ""]
+						}
+					}
+				}
+			]
+		}
+	]
+}
