@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'quotations',
 ]
 
+AUTH_USER_MODEL = 'accounts.User'
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # CorsMiddleware must be as high as possible
     'django.middleware.security.SecurityMiddleware',
