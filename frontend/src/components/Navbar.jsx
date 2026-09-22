@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -21,11 +21,11 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient shadow-sm sticky-top">
       <div className="container">
         <Link className="navbar-brand fw-bold d-flex align-items-center" to="/">
-          <i className="bi bi-shop me-2 fs-4"></i>
+          <i className="bi bi-diagram-3-fill me-2 fs-4"></i>
           <span>B2B RFQ Marketplace</span>
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -38,30 +38,30 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center gap-2 mt-2 mt-lg-0">
             <li className="nav-item">
-              <Link className="nav-link text-white opacity-75 opacity-100-hover" to="/">
+              <NavLink className="nav-link text-white opacity-75 opacity-100-hover" to="/">
                 Home
-              </Link>
+              </NavLink>
             </li>
 
             {isAuthenticated ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link text-white fw-semibold" to={getDashboardLink()}>
+                  <NavLink className="nav-link text-white fw-semibold" to={getDashboardLink()}>
                     Dashboard
-                  </Link>
+                  </NavLink>
                 </li>
 
                 {user?.role === 'BUYER' && (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/buyer/rfqs">
+                      <NavLink className="nav-link text-white opacity-75 opacity-100-hover" to="/buyer/rfqs">
                         My RFQs
-                      </Link>
+                      </NavLink>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/buyer/quotations">
+                      <NavLink className="nav-link text-white opacity-75 opacity-100-hover" to="/buyer/quotations">
                         Quotations
-                      </Link>
+                      </NavLink>
                     </li>
                     <li className="nav-item me-lg-2">
                       <Link className="btn btn-light text-primary btn-sm rounded-pill px-3 fw-bold shadow-sm" to="/buyer/rfqs/new">
@@ -74,14 +74,14 @@ const Navbar = () => {
                 {user?.role === 'SUPPLIER' && (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/supplier/rfqs">
+                      <NavLink className="nav-link text-white opacity-75 opacity-100-hover" to="/supplier/rfqs">
                         Browse RFQs
-                      </Link>
+                      </NavLink>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link text-white" to="/supplier/quotations">
+                      <NavLink className="nav-link text-white opacity-75 opacity-100-hover" to="/supplier/quotations">
                         My Quotations
-                      </Link>
+                      </NavLink>
                     </li>
                   </>
                 )}
