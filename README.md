@@ -337,17 +337,70 @@ npm run build
 
 ## Deployment
 
-### Frontend Deployment (Vercel / Netlify)
-1. Push repository to GitHub.
-2. Import `frontend/` directory into Vercel or Netlify.
-3. Configure Build Command: `npm run build` and Output Directory: `dist`.
-4. Set Environment Variable: `VITE_API_BASE_URL=https://your-backend-domain.com/api`.
+### Backend Deployment (Render & Managed PostgreSQL)
 
-### Backend Deployment (Render / Railway / AWS EC2)
-1. Provision a managed PostgreSQL instance (e.g., Render Postgres / AWS RDS).
-2. Set Environment Variables (`SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `CORS_ALLOWED_ORIGINS`).
-3. Set WSGI entry point to `config.wsgi:application` using `gunicorn` or `uvicorn`.
-4. Execute database migrations (`python manage.py migrate`).
+The backend is configured out-of-the-box for seamless deployment to **Render** using Gunicorn, WhiteNoise, and Managed PostgreSQL via `dj-database-url`.
+
+#### 1. Repository Blueprint Setup
+1. Push your repository to GitHub/GitLab.
+2. In the [Render Dashboard](https://dashboard.render.com/), click **New +** -> **Blueprint**.
+3. Connect your repository. Render will automatically detect the [`render.yaml`](file:///c:/Users/KARUNAKAR/OneDrive/Desktop/B2B-RFQ-Marketplace/backend/render.yaml) file in the `backend/` folder and provision:
+   - A **Web Service** (`b2b-rfq-marketplace-backend`) using Python runtime.
+   - A **PostgreSQL Database** (`b2b-rfq-db`).
+
+#### 2. Manual Web Service Setup (Alternative)
+If setting up manually on Render or similar platforms (Heroku, Railway, DigitalOcean):
+- **Root Directory**: `backend`
+- **Build Command**: `./build.sh` (or `pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate`)
+- **Start Command**: `gunicorn config.wsgi:application`
+- **Environment Variables**:
+  - `DATABASE_URL`: `postgres://<user>:<password>@<host>:<port>/<dbname>` (Automatically provided by managed Postgres)
+  - `SECRET_KEY`: Long, random secure key string.
+  - `DEBUG`: `False`
+  - `ALLOWED_HOSTS`: `backend-name.onrender.com,your-domain.com`
+  - `CORS_ALLOWED_ORIGINS`: `https://your-frontend.vercel.app`
+  - `SECURE_SSL_REDIRECT`: `True` (Enforces HTTPS)
+
+---
+
+### Frontend Deployment (Vercel)
+
+The React frontend is optimized for zero-config SPA deployment on **Vercel**.
+
+#### 1. Connect Vercel Project
+1. Log into [Vercel Dashboard](https://vercel.com/) and click **Add New** -> **Project**.
+2. Import your GitHub repository.
+3. Set **Root Directory** to `frontend`.
+4. Framework Preset: **Vite**.
+
+#### 2. Configure Environment Variable
+Add the following variable under **Environment Variables**:
+- `VITE_API_URL` = `https://b2b-rfq-marketplace-backend.onrender.com/api` (Replace with your deployed backend URL).
+
+#### 3. Build Configuration & Routing
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- SPA Client-Side Routing is automatically handled by [`vercel.json`](file:///c:/Users/KARUNAKAR/OneDrive/Desktop/B2B-RFQ-Marketplace/frontend/vercel.json), preventing 404 errors on direct URL navigation.
+
+---
+
+### Local Verification Before Deployment
+
+Before pushing to production, verify all production builds locally:
+
+```bash
+# 1. Test Static Files Collection & WhiteNoise Setup
+.\backend\venv\Scripts\python.exe backend\manage.py collectstatic --no-input
+
+# 2. Run Django Production Security Checks
+$env:DEBUG="False"; .\backend\venv\Scripts\python.exe backend\manage.py check --deploy
+
+# 3. Run Backend Unit & API Test Suite
+.\backend\venv\Scripts\python.exe backend\manage.py test accounts rfqs quotations
+
+# 4. Verify Frontend Vite Production Bundle
+npm --prefix frontend run build
+```
 
 ---
 

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: b2b-rfq-marketplace-backend
+    env: python
+    rootDir: backend
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: b2b-rfq-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://your-frontend.vercel.app"
+
+databases:
+  - name: b2b-rfq-db
+    databaseName: b2brfq_db
+    user: b2brfq_user
